@@ -18,6 +18,19 @@ var texts =[
 	}
 ];
 
+var latlong = [{
+		'city': 'new_york',
+		'latlong' : '40.70583,-74.2588815'
+	},
+	{
+		'city': 'los_angeles',
+		'latlong': '34.0207488,-118.6926141'	
+	},
+	{
+		'city' : 'las_vegas',
+		'latlong':'36.1251954,-115.3154296'	
+	}];
+
 app.use(express.static(__dirname + '/images'));
 
 app.get('/', function(req, res){
@@ -58,6 +71,13 @@ app.get('/images', function(req, res){
 	res.download(file);
 });
 
+app.get('/maps', function(req, res){
+	var city = req.query.city;
+	var file = __dirname+ '/images/'+city+'/map.jpg';
+	res.download(file);
+});
+
+
 app.get('/api/search', function(req, res){
 	var query = req.query.term;
 	res.sendStatus(query);
@@ -68,6 +88,15 @@ app.get('/api/facts', function(req, res){
 	for(var i =0;i<texts.length;i++){
 		if(texts[i].city==city){
 			return res.json(texts[i]);
+		}
+	}
+});
+
+app.get('/api/maps', function(req, res){
+	var city= req.query.city;
+	for(var i=0;i<latlong.length;i++){
+		if(latlong[i].city==city){
+			return res.json(latlong[i]);	
 		}
 	}
 });
